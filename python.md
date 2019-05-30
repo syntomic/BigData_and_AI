@@ -1,0 +1,257 @@
+<p align="right">Refer to Python for Data Analysis(Second edition) Wes McKinney</p>
+
+## 常用模块
+- 数值计算工具：Numpy、SciPy
+- 分析库：Statsmodels、scikit-learn
+- 数据可视化库：matplotlib、seaborn
+ 
+## NumPy 基础：数组和矢量计算
+- 特色
+    - 在一个连续的内存块储存数据
+    - C语言编写的算法库可以操作内存
+    - 在整个数组上执行复杂的计算
+    - 快10到100倍，并且使用内存更少
+
+- ndarrary对象：
+    - 创建：`np.array()`,`arr.reshape()`
+    - 数据类型：`arr.dtype()`
+    - 数组运算(矢量化)：运用到元素级`1 / arr`
+    - 索引
+        - 基本索引和切片`arr[5:8]`
+        - 切片索引`arr2d[:2,1:]`
+        - 布尔型索引`arr[names='Bobs']`
+        - 花式索引(复制)`arr[[4,3,0,6]]`
+    - 数组转置和轴对换：`arr.transpose()`
+    - 通用函数：`abs`
+    - 利用数组进行数据处理
+    - 数学和统计方法：`cumsum()`
+    - 排序：`sort()`
+    - 唯一化以及其他的集合逻辑：`unique()`
+    - 用于数组的文件IO：`save()`,`load()`
+    - 线性代数：`dot()`
+    - 伪随机数生成：`seed()`
+
+- 简单应用:随机漫步
+
+## pandas入门
+- 与Numpy区别
+    - Padas: 处理表格和混合数据
+    - Nummpy: 统一的数值数组数据
+
+- 数据结构
+    - Series: `pd.Series()`,
+        - 定长的有序字典：`index`+ `values`
+        - 缺失数据：`.isnull()`,`.notnull()`
+        - name属性：`.name`
+    - DataFrame：`pd.DataFrame()`
+        - 查看：`.head()`
+        - 索引对象(不可变、可重复)：`.loc[]`
+        - 删除：`del frame['a']`
+        - 嵌套字典
+- 基本功能
+    - 重新索引：`reindex()`
+    - 丢弃指定轴上的项：`drop()`
+    - 索引、选取和切片
+        - 轴标签：`loc[]`
+        - 整数索引：`iloc[]`
+    - 算术运算和数据对齐
+    - 算术方法中填充值：`df1.add(df2, fill_value=0)`
+    - DateFrame和Series之间的运算：广播
+    - 函数应用和映射：`apply()`
+    - 排序和排名：`sort_index()`+`sort_values()` `rank()`
+    - 带有重复标签的轴索引：`is_unique`
+
+- 汇总和计算描述统计
+    - 简单操作
+        - 约简和汇总：`sum(, skipna=False)`
+        - 间接统计：`idxmax()`
+        - 累计型：`cumsum()`
+        - 多个汇总：`describe()`
+    - 相关系数与协方差：`corr()`+`cov()`
+    - 唯一值、计数值以及成员资格：`unique()`+`value_counts()`+`isin()`
+
+## 数据加载、存储与文件格式
+- 读写文本格式的数据：`read_csv()`+`read_table()`
+    - 常见参数
+    - 逐块读取文本文件：`chunksize=`
+    - 将数据写出到文本格式：`to_csv()`
+    - 处理分隔符格式
+    - Json数据：`json.loads()`+`json.dumps()`vs`read_json()`+`to_json`
+    - XML和HTML: `read_html()`
+    - 利用lxml.objectify解析XML
+- 二进制数据格式：`read_pickle()`+`to_pickle()`
+    - 使用HDF5格式(一次写多次读)：`HDFStore()`
+    - 读取Microsoft Excel文件：`read_excel()` or `ExcelFile()`
+- Web APIs交互
+- 数据库交互：`read_sql()`
+
+## 数据清洗和准备
+- 处理缺失数据
+    - 滤除缺失数据：`dropna(thresh=2)`
+    - 填充缺失数据：`fillna(method='ffill')`
+- 数据转换
+    - 移除重复数据：`duplicated()` + `drop_duplicates()`
+    - 利用函数或映射进行数据转换：`lower()` `map()`
+    - 替换值：`replace()`
+    - 重命名轴索引：`rename()`
+    - 离散化和bin划分：`cut()` + `qcut()`
+    - 检测和过滤异常值：`any()`+`sign()`
+    - 排列和随机采用：`permutation()`+`sample()`
+    - 计算指标/哑变量：`get_dummies()`+`cut()`
+- 字符串操作
+    - python内置
+        - 字符串对象方法：`find()`vs`index()`
+        - 正则表达式
+    - pandas的矢量化字符串函数：`str.findall()`
+
+## 数据规整：聚合合并和重塑
+- 层次化索引：`stack()`+`unstack()`
+    - 重排和分级排序：`swaplevel()`+`sort_index()`
+    - 根据级别汇总统计
+    - 使用DateFrame的列进行索引
+
+- 合并数据集
+    - 数据库风格的DataFrame合并：`merge()`
+    - 索引上的合并：`join()`
+    - 轴向连接：`concatenation()`+`concat()`
+    - 合并重叠数据：`where`+`combine_first()`
+- 重塑和轴向旋转
+    - 重塑层次化索引
+    - 将长格式旋转为宽格式：`pivot()`
+    - 将宽格式旋转为长格式：`melt()`
+
+## 数据聚合和分组运算
+- GroupyBy机制：Split + Apply + Combine
+    - 简例：`df.groupby('key1')`
+    - 对分组进行迭代：`for k,v in df.groupby('key1') `
+    - 选取一列或列的子集：`df.groupby('key1')['data']`
+    - 通过字典或Series进行分组：`df.groupby(series, axis=1)`
+    - 通过函数进行分组：`df.groupby(len)`
+    - 根据索引级别分组：`df.groupby(level='city', axis=1)`
+- 数据聚合：从数组产生标量值 `.count()`
+    - 面向列的多函数应用：`.agg(['mean','std', your_function])`
+    - 以"没有行索引"的形式返回聚合数据：`as_index=False`
+- apply：`df.groupby('key').apply(top)`
+    - 禁止分组键：`group_keys=False`
+    - 分位数和桶分析：+`cut()`
+    - 实例
+        - 用特定于分组的值填充缺失值
+        - 随机采样和排列
+        - 分组加权平均数和相关系数
+        - 组级别的线性回归
+- 透视表和交叉表：`df.pivot_table()`
+    - 交叉表：`pd.crosstab()`
+## 绘图和可视化
+- matplotlib API入门：`import matplotlib.pyplot as plt` `plt.plot()`
+    - Figure和Subplot
+        - `fig = plt.figure()`+`ax=fig.add_subplot()`$\Leftrightarrow$`fig, axes=plt.subplots()`
+        - `ax.hist()`
+    - 调整subplot周围的间距：`plt.subplots_adjust()`
+    - 颜色、标记和线型：`ax.plot(x, y, linestyle='--', color='g')`
+    - 刻度、标签和图例
+    - 设置标题、轴标签、刻度以及刻度标签：`.set_title()`
+    - 添加图例：`ax.legend()`
+    - 注解以及在Subplot上绘图：`circ = plt.Circle()`+`ax.add_patch(circ)`
+    - 将图表保存到文件：`plt.savefig()`
+    - matplotlib配置：`plt.rc('figure', figsize=(10,10), **font_options)`
+- 使用pandas和seaborn绘图
+    - 线型图：`pd.plot()`
+    - 柱状图
+        - `df.plot.bar()`+`df.plot.barh()`
+        - `sns.barplot()`
+    - 直方图和密度图
+        - `.plot.hist()`+`.plot.density()`
+        - `sns.distplot()`
+    - 散布图或点图
+        - `sns.regplot()`
+        - `sns.pairplot()`
+    - facet grid和数据类型
+        - `sns.factorplot()`
+        - 盒图：`kind='box'`
+
+## 时间序列
+- 时间序列数据
+    - timestamp
+    - period
+    - interval
+    - timedeltas
+- 日期和数据数据类型及工具：`datetime.datetime()` + `dateutil.parser.parse()`
+    - 字符串和datatime的相互转换：`.strftime()`+`.strptime()`
+        - `pd.to_datetime()`
+- 时间序列基础
+    - 索引、选取、子集构造
+    - 带有重复索引的时间序列
+- 日期的范围、频率以及移动：`.resampler('D')`
+    - 生成日期范围：`pd.date_range()`
+    - 频率和日期偏移量：`freq='1h30min'`
+    - WOM日期：`freq='WOM-3FRI'`
+    - 移动(超前和滞后)数据：`.shfit()`
+    - 通过偏移量对日期进行位移：`offset.rollback()`
+- 时区处理：`pytz`
+    - 时区本地化和转换：`.tz_localize()`+`.tz_convert()`
+    - 操作时区意识型TimeStamp对象
+    - 不同时区之间的运算
+- 时期及其算术运算：`pd.Period()`
+    - 时期的频率转换：`.asfreq()`
+    - 按季度计算的时期频率：`Q-DEC`
+    - TimeStamp与Period相互转换：`.to_period()` +`.to_timestamp()`
+    - 通过数组创建PeriodIndex：`pd.PeriodIndex()`
+- 重采样及频率转换：`.resample('D')`
+    - 降采样：`closed = 'right'`
+    - OHLC重采样：`.ohcl`
+    - 升采样和插值
+    - 通过时期进行重采样
+- 移动窗口函数：`.rolling()`
+    - 指数加权函数：`.ewm()`
+    - 二元移动窗口函数
+    - 自定义移动窗口函数
+
+## 高级应用
+- Numpy
+    - ndarray对象的内部机制：data+dtype+shape+strides
+        - 数据类型体系
+    - 高级数组操作
+        - 数组重塑
+        - C和Fortran顺序
+        - 数据的合并和拆分
+        - 堆叠辅助类：r和c
+        - 元素的重复操作：`.tile()`+`.repeat()`
+        - 花式索引的等价函数：`.take()`+`.put()`      
+    - 广播
+        - 设置数组的值
+    - ufunc高级应用
+        - ufunc实例方法
+        - 编写新的ufunc
+    - 结构化和记录式数组
+        - 嵌套dtype和多维字段
+        - 为什么要用结构化数组
+    - 关于排序
+        - 间接排序：`.argsort()`+`.lexsort()`
+        - 其他排序算法：stable
+        - 部分排序数组：`.partition()`+`.argpartition()`
+        - 在有序数组中查找元素：`np.searchsorted()`
+    - 用Numba编写快速Numpy函数
+    - 高级数组输出输入
+        - 内存映像文件：`np.memmap()`
+        - HDF5及其他
+    - 性能建议
+        - 注意事项
+            - 循环和条件转换为数组运算和布尔数组运算
+            - 尽量使用广播
+            - 避免复制数据，尽量使用切片
+            - 使用ufunc及其各种方法
+        - 连续内存的重要性
+        - 
+- Pandas
+    - 分类数据
+        - 背景和目的
+        - 分类类型：`Categories`
+        - 用分类进行计算
+        - 用分类提高性能
+        - 分类方法
+        - 为建模创建虚拟变量(one-hot)
+    - Group高级应用
+        - 分组转换和'解封'GroupBy：`.transform()`
+        - 分组的时间重采样
+    - 链式编程技术：`.assign()`
+        - 管道方法：`df.pipe()`
