@@ -157,3 +157,8 @@
     - 用测试集评估系统
         - 测试集误差置信区间
     - 启动、监控、维护系统
+
+## 一些技巧
+- 简单正则化:`X_train.astype(np.float64)`
+- SVM分类器:`SGDClassifier(loss="hinge", alpha=1/(m*C))`
+- 数据不能放进内存:`np.memmap`
