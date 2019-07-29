@@ -206,118 +206,118 @@ for epoch in range(EPOCHS):
     - 学习曲线: `history.history`
 - 评估模型: `model.evaluate()`
 - 预测: `model.predict(test_data)`
+-------
+## 待整理
+- 加载数据集:`keras.datasets`
+    - 数据代表性:浮点数张量
+    - 时间箭头
+    - 非平稳问题:在平稳的时间尺度上收集问题
+    - 数据冗余
+- 数据预处理
+    - 数据向量化
+        - 编码标签(多分类)
+            - One-hot:`keras.utils.to_categorical(train_labels)`
+            - 整数张量:`loss='sparse_categorical_crossentropy'`
+    - 值标准化
+    - 处理缺失值
+    - 特征工程:大部分的特征工程现代深度学习都是不需要的
+- 网络架构:`model.summary()`
+    - 定义模型
+        - Sequential类: `model = keras.models.Sequential()`
+        - 函数式API:多输入 多输出 类图
+        ```python
+        Model = tf.keras.models.Model
+        layers = tf.keras.layers
+        Input = tf.keras.Input
 
-[^_^]: ## 使用高级API: tf.keras
-    - 加载数据集:`keras.datasets`
-        - 数据代表性:浮点数张量
-        - 时间箭头
-        - 非平稳问题:在平稳的时间尺度上收集问题
-        - 数据冗余
-    - 数据预处理
-        - 数据向量化
-            - 编码标签(多分类)
-                - One-hot:`keras.utils.to_categorical(train_labels)`
-                - 整数张量:`loss='sparse_categorical_crossentropy'`
-        - 值标准化
-        - 处理缺失值
-        - 特征工程:大部分的特征工程现代深度学习都是不需要的
-    - 网络架构:`model.summary()`
-        - 定义模型
-            - Sequential类: `model = keras.models.Sequential()`
-            - 函数式API:多输入 多输出 类图
-            ```python
-            Model = tf.keras.models.Model
-            layers = tf.keras.layers
-            Input = tf.keras.Input
+        input_tensor = Input(shape=(64,))
+        x = layers.Dense(32, activation='relu')(input_tensor)
+        x = layers.Dense(32, activation='relu')(x)
+        output_tensor = layers.Dense(10, activation='softmax')(x)
 
-            input_tensor = Input(shape=(64,))
-            x = layers.Dense(32, activation='relu')(input_tensor)
-            x = layers.Dense(32, activation='relu')(x)
-            output_tensor = layers.Dense(10, activation='softmax')(x)
-
-            model = Model(input_tensor, output_tensor)
-            ``` 
-        - 全连接层:`keras.layers.Dense(units, **kwargs)`
-            - 激活函数:`activation='relu'`
-            - 正则化
-                - L1或L2: `kernel_regularizer=keras.regularizers.l1_l2(0.001)`
-                - Dropout层(在层的输出值中引入噪声,破坏不显著的偶然模式): `keras.layers.Dropout(0.5)`
-    - 编译步骤: `model.compile(**kwargs)`
-        - 损失函数(`keras.losses`):`loss='categorical_crossentropy'` ![Loss](../../../PNG/Loss.png)
-            - 序列学习 -> 联结主义时序分类(CTC)
-        - 优化器(`keras.optimizers`): `optimizer='rmsprop'`
-        - 训练和测试过程中需要的监控的指标(`keras.metrics`):`metric=['accuracy']`
-            - 平衡分类:精度和ROC AUC 
-            - 不平衡分类: Precise Recall
-    - 训练:`history = model.fit(x_train, y_train, batch_size=128, epochs=10, **kwargs)`
-        - 验证集:`validation_data=(x_val, y_val)`
-            - K折交叉验证
-            - 带有打乱数据的重复K折验证:多次K折验证
+        model = Model(input_tensor, output_tensor)
+        ``` 
+    - 全连接层:`keras.layers.Dense(units, **kwargs)`
+        - 激活函数:`activation='relu'`
         - 正则化
             - L1或L2: `kernel_regularizer=keras.regularizers.l1_l2(0.001)`
-            - Dropout(在层的输出值中引入噪声,破坏不显著的偶然模式): `keras.layers.Dropout(0.5)`
-        - 训练过程中的所有数据:`history_dict = history.history`
-        - 保存模型:`model.save('filename.h5')`
-            - 加载保存的模型:`keras.models.load_model('filname.h5')`
-    - 分析结果
-        - 过拟合
-        - 平滑曲线:数据点替换为前面数据点的指数移动平均值
-    - 评估在测试集上的性能: `test_loss, test_acc = model.evaluate(x_test, y_test)`
-        - 预测:`model.predict(x_test)`
-    - 回调函数: `keras.callbacks`
-        - Model checkpointing
-        - early stopping
-        - 动态调节某些参数
-        - 记录训练指标, 可视化
-    - 批标准化:`BatchNormalization()`
-    ## 神经网络实践
-    - 卷积(Concolution)神经网络:输入/输出形状`(image_height, image_width, image_depth)`
-        - 数据预处理:`keras.preprocessing.image`
-            - 硬盘上图像文件自动转换为处理好的批量张量:`train_generator = ImageDateGenerator(**kwargs)`
-                - 归一化:`rescale=1./255`
-                - 数据增强:`rotation_range=40, horizontal_flip=True`
-                - 生成器
-                    - 利用`image`加载:`.flow(image.load_image(image_path), batch_size=1)`
-                    - 直接加载:`.flow_from_directory(train_dir, batch_size=20, **kwargs)`
-        - 卷积层:`Con2D(output_depth,(window_height, window_width), **kwargs)`
-            - 是否使用填充:`padding=valid/same`
-            - 步幅:`strides=1`
-        - 深度可分离卷积:`SeparableCov2D()`
-        - 池化层:`MaxPooling2D((window_height, window_width))`
-            - 无步进的卷积+最大池化
-            - 展平:`Flatten()`
-        - 拟合:`model.fit_generator(train_generator, steps_per_epochs=100, epochs=30)`
-        - 预训练:`keras.applications`
-            - 导入模型:`conv_base = VGG16(include_top=False)`
-            - 特征提取:重复使用卷积基
-                - 数据集上运行卷积基,输出保存为numpy数组,再训练一个密集连接分类器
-                - 再顶部添加Dense层扩展已有模型:`conv_base.trainable = False`
-            - 微调(fine-tuning): 解冻`conv_base`, 然后冻结其中部分层
-        - 可视化
-            - 中间激活:模型实例化 `Model`类
-            - 过滤器:调整输入数据让给定过滤器的响应最大化
-            - 热力器:生成类激活的热力图(Grad-CAM算法)
-    - 循环(Recurrent)神经网络: `LSTM` -> 3D张量
-        - 数据预处理:`keras.processing.text`
-            - 文本到标记(token)
-            - 标记到向量
-                - One-hot编码:`Tokenizer()`
-                    - 散列技巧
-                - 词嵌入层: 输入`(samples, sequence_length)` 输出`(samples, sequence_length, embedding_dim)`
-                    - 填充:`sequence.pad_sequences()`
-                    - 使用Embedding层学习词嵌入:`Embedding(tokens, embedding_dim)`
-                    - 使用预训练的词嵌入: `word2vev` `GloVe`
-                        - 下载GloVe词嵌入,并准备词嵌入矩阵: `(tokens, embedding_dim)`
-        - 循环层: 输入`(batch_size, timesteps, input_features)`
-            - SimpleRNN: `SimpleRNN(output_features, return_sequences=False)`
-            - LSTM和GRU: `LSTM(GRU)(output_features)`
-                - 循环dropout掩码: `recurrent_dropout = 0.3`
-            - 双向RNN:`keras.layers.Bidirectional(layers.LSTM())`
-            - 一维卷积神经网络:输入`(samples, time, features)` `Conv1D(output_features, windows)`
-    - 生成式深度学习
-        - 使用LSTM生成文本:`temperature`
-        - DeepDream: 反向运行一个卷积神经网络, 使多个层的所有过滤器的激活同时最大化
-        - 神经风格迁移:内容与风格的定义
-        - 图像生成: 潜在空间
-            - 变分自编码器VAE:学习具有良好结构, 连续的潜在空间
-            - 生成对抗网络GAN:图像逼真
+            - Dropout层(在层的输出值中引入噪声,破坏不显著的偶然模式): `keras.layers.Dropout(0.5)`
+- 编译步骤: `model.compile(**kwargs)`
+    - 损失函数(`keras.losses`):`loss='categorical_crossentropy'` ![Loss](../../../PNG/Loss.png)
+        - 序列学习 -> 联结主义时序分类(CTC)
+    - 优化器(`keras.optimizers`): `optimizer='rmsprop'`
+    - 训练和测试过程中需要的监控的指标(`keras.metrics`):`metric=['accuracy']`
+        - 平衡分类:精度和ROC AUC 
+        - 不平衡分类: Precise Recall
+- 训练:`history = model.fit(x_train, y_train, batch_size=128, epochs=10, **kwargs)`
+    - 验证集:`validation_data=(x_val, y_val)`
+        - K折交叉验证
+        - 带有打乱数据的重复K折验证:多次K折验证
+    - 正则化
+        - L1或L2: `kernel_regularizer=keras.regularizers.l1_l2(0.001)`
+        - Dropout(在层的输出值中引入噪声,破坏不显著的偶然模式): `keras.layers.Dropout(0.5)`
+    - 训练过程中的所有数据:`history_dict = history.history`
+    - 保存模型:`model.save('filename.h5')`
+        - 加载保存的模型:`keras.models.load_model('filname.h5')`
+- 分析结果
+    - 过拟合
+    - 平滑曲线:数据点替换为前面数据点的指数移动平均值
+- 评估在测试集上的性能: `test_loss, test_acc = model.evaluate(x_test, y_test)`
+    - 预测:`model.predict(x_test)`
+- 回调函数: `keras.callbacks`
+    - Model checkpointing
+    - early stopping
+    - 动态调节某些参数
+    - 记录训练指标, 可视化
+- 批标准化:`BatchNormalization()`
+## 神经网络实践
+- 卷积(Concolution)神经网络:输入/输出形状`(image_height, image_width, image_depth)`
+    - 数据预处理:`keras.preprocessing.image`
+        - 硬盘上图像文件自动转换为处理好的批量张量:`train_generator = ImageDateGenerator(**kwargs)`
+            - 归一化:`rescale=1./255`
+            - 数据增强:`rotation_range=40, horizontal_flip=True`
+            - 生成器
+                - 利用`image`加载:`.flow(image.load_image(image_path), batch_size=1)`
+                - 直接加载:`.flow_from_directory(train_dir, batch_size=20, **kwargs)`
+    - 卷积层:`Con2D(output_depth,(window_height, window_width), **kwargs)`
+        - 是否使用填充:`padding=valid/same`
+        - 步幅:`strides=1`
+    - 深度可分离卷积:`SeparableCov2D()`
+    - 池化层:`MaxPooling2D((window_height, window_width))`
+        - 无步进的卷积+最大池化
+        - 展平:`Flatten()`
+    - 拟合:`model.fit_generator(train_generator, steps_per_epochs=100, epochs=30)`
+    - 预训练:`keras.applications`
+        - 导入模型:`conv_base = VGG16(include_top=False)`
+        - 特征提取:重复使用卷积基
+            - 数据集上运行卷积基,输出保存为numpy数组,再训练一个密集连接分类器
+            - 再顶部添加Dense层扩展已有模型:`conv_base.trainable = False`
+        - 微调(fine-tuning): 解冻`conv_base`, 然后冻结其中部分层
+    - 可视化
+        - 中间激活:模型实例化 `Model`类
+        - 过滤器:调整输入数据让给定过滤器的响应最大化
+        - 热力器:生成类激活的热力图(Grad-CAM算法)
+- 循环(Recurrent)神经网络: `LSTM` -> 3D张量
+    - 数据预处理:`keras.processing.text`
+        - 文本到标记(token)
+        - 标记到向量
+            - One-hot编码:`Tokenizer()`
+                - 散列技巧
+            - 词嵌入层: 输入`(samples, sequence_length)` 输出`(samples, sequence_length, embedding_dim)`
+                - 填充:`sequence.pad_sequences()`
+                - 使用Embedding层学习词嵌入:`Embedding(tokens, embedding_dim)`
+                - 使用预训练的词嵌入: `word2vev` `GloVe`
+                    - 下载GloVe词嵌入,并准备词嵌入矩阵: `(tokens, embedding_dim)`
+    - 循环层: 输入`(batch_size, timesteps, input_features)`
+        - SimpleRNN: `SimpleRNN(output_features, return_sequences=False)`
+        - LSTM和GRU: `LSTM(GRU)(output_features)`
+            - 循环dropout掩码: `recurrent_dropout = 0.3`
+        - 双向RNN:`keras.layers.Bidirectional(layers.LSTM())`
+        - 一维卷积神经网络:输入`(samples, time, features)` `Conv1D(output_features, windows)`
+- 生成式深度学习
+    - 使用LSTM生成文本:`temperature`
+    - DeepDream: 反向运行一个卷积神经网络, 使多个层的所有过滤器的激活同时最大化
+    - 神经风格迁移:内容与风格的定义
+    - 图像生成: 潜在空间
+        - 变分自编码器VAE:学习具有良好结构, 连续的潜在空间
+        - 生成对抗网络GAN:图像逼真
