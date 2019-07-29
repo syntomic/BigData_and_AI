@@ -1,0 +1,107 @@
+- 听觉
+    - 语音识别:语音转换为文字
+        - 概述
+            - 语音的产生: 肺部呼出气体,通过声门的开启与闭合产生的周期信号,然后声道（包括舌头牙齿）对信号调制后产生
+                - 声道的不同形状对应不同的滤波器
+            - 分类
+                - 词汇量大小
+                - 说话人
+                - 声学环境
+                - 说话方式
+            - 效果评测:
+                - 词错误率(WER): 编辑距离(替换错误, 删除错误, 插入错误)
+        - MFCC特征提取: 将语音物理信息（频谱包络和细节）进行编码运算得到的一组特征向量
+            - 分帧处理:20~40ms
+            - 计算每一帧的功率谱(power spectrum):周期图(共振)
+            - 频率划分(bin): Mel滤波器
+            - 对每个滤波器的能量取log: 人类对声音大小的感受不是线性的
+            - 对能量进行DCT变换: 去掉相关性
+            - 只取第2~13个系数:高频信号使识别效果变差
+        - 基于HMM的语音识别: 特征向量序列到词序列
+            - 高斯混合模型:GMM
+            - 解码器
+                - WFST:能够用统一的方式表示这些模型并且融合起来，从而可以达到很快的搜索速度
+        - 深度学习
+            - HNN-DNN
+            - End-to-End
+                - seq2seq:语音波形时序信号到词序列
+                - CTC: 不需要对齐 `WrapCTC`
+                    - `DeepSpeech`
+        - 开源语音识别工具:`Kaldi`
+            - `PyTorch-Kaldi`
+        - 应用
+            - 识别语音中的关键词
+            - 基于RNN的语音唤醒引擎: `mycroft-precise`
+    - 语言合成
+    - Music
+- 视觉
+    - 视觉任务
+        - 图像分类
+        - 目标检测: 检测出图片中包含的目标物体，同时标注一个Bounding box
+            - R-CNN
+                - 步骤
+                    - 生成物体类别无关的Region proposal的模块: 高召回率的前提下保证一定的准确率
+                        - Selective search:根据颜色对图像进行分割:`opencv`
+                    - 一个CNN来提取固定大小的特征
+                    - 每个类别都有一个线性的SVM分类器来判断候选区域是否属于这个类别
+                - Fast R-CNN:去除SVM和Bounding box回归
+                - Faster R-NN: 去掉Region Proposal算法, 实现End-to-End
+                    - 具体实现: `faster-rcnn.pytorch`
+                - FPN:基于金字塔概念设计的特征提取器
+        - 语义分割: 判断每个像素属于哪个类别
+        - 实例分割: 判断每个像素属于哪个实体
+            - Mask R-CNN: Faster R-CNN的自然推广
+                - 具体实现:`Mask-RCNN`
+    - 人脸识别: `FaceNet`
+    - 风格迁移
+    - Image to Image Translation:`pytorch-CycleGAN-and-pix2pix`
+- 语言
+    - Word Embedding: `Word2Vec`
+    - 循环神经网络
+    - 语言模型: 词典生成句子
+        - N-Gram
+            - 马尔可夫
+            - 平滑
+        - RNN
+    - 经典文本分类算法
+        - 朴素贝叶斯分类
+        - 逻辑回归
+        - 最大熵模型
+        - 对数线性模型
+    - 序列标注算法:输入是一个序列，输出是一个相同长度的序列
+        - HMM
+        - MEMM
+        - CRF: `CRFsuite`
+        - LSTM-CRF
+    - 句法分析: 研究词和词如何组合成正确的句子
+        - 成分句法分析: 由词构成短语，由简单短语构成复杂短语，最终构成句子的过程
+            - 上下文无关文法
+        - 依存句法分析: 关注词本身以及词之间的二元依存关系
+            - 基于转换: `greedy transition-based parser`
+            - 神经网络
+                - `A Fast and Accurate Dependency Parser using Neural Networks`
+                - `Simple and Accurate Dependency Parsing Using Bidirectional LSTM Feature Representations`
+    - 机器翻译
+        - IBM模型
+        - 基于短语的统计机器翻译
+        - Google NMT: Encoder-Decoder加Attention的框架
+    - Transformer
+        - BERT
+        - OpenAI GPT-2
+        - XLNET
+    - 工具:`Stanford Core NLP`
+    - 实战:
+        - chatbot
+- 强化学习
+    - 马尔科夫决策过程MDP
+        - OpenAI Gym
+    - 动态规划
+    - 梦特卡罗方法
+    - 时间差分方法
+        - n步方法、TD-λ、Eligibility Trace和函数近似
+    - Policy Gradient
+    - Deep Q-Learning
+    - AlphaGo AlphaGo Zero AlphaZero
+        - Imitation Learning
+        - Inverse Reinforcement Learning
+        - Meta Learning

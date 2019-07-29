@@ -45,7 +45,7 @@
 - 多类别vs多标签
     - 多类别：`clfs = sklearn.multiclass.OneVsRestClassifier(estimator=SVC(gamma='scale',random_state=0))`
     - 多标签：`y = sklearn.preprocessing.(Multi)LabelBinarizer().fit_transform(y)`
-## 一个完整的机器学习项目：采用Jypyter Notebook
+## 一个完整的机器学习项目
 - 通用设置
     - 项目配置：`import os`
     - 画图设置：`%matplotlib inline`
@@ -89,7 +89,7 @@
         - 标准化(受异常值影响小)：`StandardScaler`
     - 定义流水线
         - 数值流水线
-        ```
+        ```python
         from sklearn.pipeline import Pipeline
         from sklearn.preprocessing import StandardScaler
 
@@ -102,7 +102,7 @@
         data_num_tr = num_pipeline.fit_transform(data_num)
         ```
         - 总流水线
-        ```
+        ```python
         from sklearn.compose import ColumnTransformer
 
         num_attribs = data_num_col
@@ -120,7 +120,7 @@
         - 在训练集上训练和评估不同模型
             - 误差：`sklearn.metrics.mean_squared_error(data_labels, data_predictions)`
         - 交叉验证：给出一个可能模型列表(二到五个)
-        ```
+        ```python
         from sklearn.model_selection import cross_val_score
 
         scores = cross_val_score(tree_reg, data_prepared, data_labels,
@@ -130,7 +130,7 @@
         - 保存模型
     - 微调模型
         - 网格搜索
-        ```
+        ```python
         from sklearn.model_selection import GridSearchCV
         param_grid = [
             # try 12 (3×4) combinations of hyperparameters
