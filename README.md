@@ -1,6 +1,6 @@
 ## 内容介绍
 - [数据分析](Data/analysis.md)
-    - [python](Data/basic.md): 轻松集成C,C++以及Fortran代码, 不仅适用于研究和原型构建,同时也适用与构建生产系统
+    - [python](Data/basic.md): 轻松集成C, C++以及Fortran代码, 不仅适用于研究和原型构建, 同时也适用与构建生产系统
         - Numpy
         - Pandas
         - Matplotlib
@@ -16,7 +16,7 @@
     - 隐私: Personal Identifiable Information
 - AI: 把人类从无意义的、重复性的思维模式中解放出来, 人机协作
     - 方法
-        - [机器学习](AI/ML/ml.md): 特征表示+目标函数+优化算法
+        - [机器学习](AI/ML/ml.md): 特征表示 + 目标函数 + 优化算法
             - [深度学习](AI/ML/DL/dl.md): 分层表示学习, 连续的几何空间变换
         - 软件
             - [Scikit-learn](AI/ML/sklearn.md)
@@ -29,4 +29,5 @@
     - [具体任务](https://github.com/syntomic/BigData_and_AI/tree/master/AI/)
         - [NLP](https://github.com/syntomic/BigData_and_AI/tree/master/NLP/): 理解和生成人类自然语言
             - [统计学习方法](AI/NLP/statistics.md)
-            - [深度学习](AI/NLP/deep_learning.md)        - [知识图谱](AI/NLP/KG.md): 知识的表达方式及推理
+            - [深度学习](AI/NLP/deep_learning.md)       
+            - [知识图谱](AI/NLP/KG.md): 知识的表达方式及推理
