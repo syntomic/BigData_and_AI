@@ -27,7 +27,7 @@
             - GPU
             - TPU
     - [具体任务](https://github.com/syntomic/BigData_and_AI/tree/master/AI/)
-        - [NLP](https://github.com/syntomic/BigData_and_AI/tree/master/NLP/): 理解和生成人类自然语言
+        - [NLP](https://github.com/syntomic/BigData_and_AI/tree/master/AI/NLP/): 理解和生成人类自然语言
             - [统计学习方法](AI/NLP/statistics.md)
             - [深度学习](AI/NLP/deep_learning.md)       
             - [知识图谱](AI/NLP/KG.md): 知识的表达方式及推理
