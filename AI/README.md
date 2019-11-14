@@ -90,7 +90,7 @@
         - OpenAI GPT-2
         - XLNET
     - 工具:`Stanford Core NLP`
-    - 实战:
+    - 实战
         - chatbot
 - 强化学习
     - 马尔科夫决策过程MDP

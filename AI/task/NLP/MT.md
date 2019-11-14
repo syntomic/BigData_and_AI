@@ -1,0 +1,7 @@
+- IBM模型: P(e|f)
+    - Noisy-Channel方法: 贝叶斯
+        - 定义翻译模型: p(f|e)
+            - 对齐
+        - 根据训练句对估计模型的参数
+    - 基于短语
+    - NMT: Encoder-Decoder + Attention
