@@ -26,7 +26,7 @@
     - 方法
         - 基于规则
         - [统计学习](AI/tech/NLP/statistics.md)
-        - [机器学习](AI/tech/ML/ml.md): 特征表示+目标函数+优化算法
+        - [机器学习](AI/tech/ML/handson.md): 特征表示+目标函数+优化算法
         - [深度学习](AI/tech/DL/dl.md): 分层表示学习, 连续的几何空间变换
     - 软件
         - [Scikit-learn](AI/tech/ML/sklearn.md): 通用机器学习包
